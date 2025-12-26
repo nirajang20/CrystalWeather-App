@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrystalWeather | NirajanG</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="loader" class="loader-overlay">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <div id="weather-effects-container"></div>
+
+    <div id="search-overlay" class="search-overlay">
+        <div class="search-modal">
+            <button id="close-search" class="close-search">×</button>
+            <form id="search-form">
+                <input type="text" id="city-input" placeholder="Enter city name..." autocomplete="off" required>
+                <button type="submit">Search</button>
+            </form>
+            <div id="city-suggestions"></div>
+        </div>
+    </div>
+    
+    <div class="content-wrapper">
+        <main class="weather-app">
+            <div class="header-controls">
+                <div class="unit-toggle">
+                    <!-- CHANGED HERE: Added the "checked" attribute -->
+                    <input type="checkbox" id="unit-switch" class="unit-checkbox" checked>
+                    <label for="unit-switch" class="unit-label">
+                        <span class="unit-inner"></span>
+                        <span class="unit-switch-text"></span>
+                    </label>
+                </div>
+                <button class="search-btn" aria-label="Search location">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+
+            <div class="weather-grid">
+                <section class="current-weather">
+                    <div class="card-header">
+                        <h2 id="current-location">Loading...</h2>
+                        <p id="local-time">--:--:--</p>
+                    </div>
+                    <div class="weather-main">
+                        <img src="https://openweathermap.org/img/wn/01d@4x.png" alt="weather icon" class="weather-icon large" id="current-weather-icon">
+                        <div class="temp-container">
+                            <span class="temperature" id="current-temp">--</span>
+                            <span class="degree-symbol" id="temp-unit">°F</span>
+                        </div>
+                        <span class="weather-desc" id="current-weather-desc">...</span>
+                    </div>
+                    <div class="weather-details">
+                        <p id="current-temp-range">H: --° / L: --°</p>
+                        <p id="current-feels-like">Feels like: --°</p>
+                        <p id="current-wind">Wind: ---</p>
+                    </div>
+                    <div class="aqi-badge">
+                        <span class="aqi-value" id="aqi-value">--</span>
+                        <span class="aqi-label" id="aqi-label">AQI</span>
+                    </div>
+                </section>
+
+                <section class="forecast" id="forecast-container"></section>
+            </div>
+
+            <section class="hourly-graph"><canvas id="tempChart"></canvas></section>
+        </main>
+    </div>
+    
+    <footer class="copyright">
+<p>&copy; <span id="year"></span> | Designed by <a href="https://nirajang.com.np" target="_blank" rel="noopener noreferrer">nirajang.com.np</a> | Weather data powered by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeather</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imgElement = document.getElementById('current-weather-icon');
+
+        if (!imgElement) {
+            console.warn('Image with ID "current-weather-icon" not found.');
+            return;
+        }
+
+        function updateFavicon(src) {
+            let link = document.querySelector("link[rel~='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+            link.href = src;
+            console.log('Favicon updated to:', src);
+        }
+
+        // Initial favicon set after short delay
+        setTimeout(() => {
+            updateFavicon(imgElement.src);
+        }, 3000);
+
+        // Set up a MutationObserver to detect changes to the 'src' attribute
+        const observer = new MutationObserver((mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+                    updateFavicon(imgElement.src);
+                }
+            }
+        });
+
+        observer.observe(imgElement, { attributes: true });
+    });
+</script>
+
+</html>
