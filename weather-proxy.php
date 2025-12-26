@@ -1,7 +1,7 @@
 <?php
 // --- SECURITY: Set the API Key on the Server ---
 // For best practice, use environment variables instead of hardcoding.
-$apiKey = '052764cf5d2a4bc4574923c49bb45d23';
+$apiKey = 'USE_YOUR_API_KEY';
 
 // --- Set Headers ---
 header("Access-Control-Allow-Origin: *"); // For development. Restrict in production.
